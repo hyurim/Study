@@ -247,21 +247,21 @@ function 키워드, 함수 이름, 매개 변수 목록, 함수 몸체로 구성
 
 함수 정의하는 방법
 
-1. 함수 선언문
+1. 함수 선언문</br>
    function add(x, y){ </br>
    return x + y; </br>
    }
 
-2. 함수 표현식
+2. 함수 표현식</br>
    var add = function(x, y){ </br>
    return x + y; </br>
    }
 
 3. Function 생성자 함수
-   var add = new Function('x', 'y', 'return x + y');
+   var add = new Function('x', 'y', 'return x + y');</br>
 
 4. 화살표 함수(ES6)
-   var add = (x, y) => x + y;
+   var add = (x, y) => x + y;</br>
 
 #### 함수 선언문
 
@@ -293,7 +293,7 @@ var add(1) = function add(2)(x, y) { </br>
 return x + y; </br>
 }; </br>
 
-console.log(add(1)(2, 5));
+console.log(add(1)(2, 5));</br>
 
 (2)는 함수 이름으로 함수 객체를 가리키는 식별자인 (1)로 호출한다.
 
@@ -313,13 +313,13 @@ var add = function foo(x, y) { </br>
 return x + y; </br>
 }; </br>
 
-console.log(add(2, 5)); // 7
-console.log(foo(2, 5)); // 함수 이름으로 호출하면 에러가 발생함.
+console.log(add(2, 5)); // 7</br>
+console.log(foo(2, 5)); // 함수 이름으로 호출하면 에러가 발생함.</br>
 
 #### 함수 생성 시점과 함수 호이스팅
 
-console.log(add(2, 5)); // 7
-console.log(sub(2, 5)); // 함수가 존재하지 않음.
+console.log(add(2, 5)); // 7</br>
+console.log(sub(2, 5)); // 함수가 존재하지 않음.</br>
 
 //함수 선언문 </br>
 function add(x, y) { </br>
@@ -373,11 +373,11 @@ console.log(add(2, 5)); // 7 </br>
 
 function add(x, y){ </br>
 return x + y; </br>
-}
-var result = add(2, 5);
-x,y : 매개변수
-x+y : 반환값
-(2, 5) : 인수
+}</br>
+var result = add(2, 5);</br>
+x,y : 매개변수</br>
+x+y : 반환값</br>
+(2, 5) : 인수</br>
 인수를 전달하여 매개변수에 대입하고 반환 값을 result로 반환한다.
 
 매개변수는 함수 몸체 내부에서만 참조할 수 있고 함수 몸체 외부에서는 참조할 수 없음.
@@ -409,13 +409,13 @@ ES6에서 도입된 매개변수 기본 값을 사용하면 인수 체크 및 �
 
 return 키워드와 표현식(반환값)으로 이뤄진 반환문을 사용해 실행 결과를 함수 외부로 반환할 수 있음.
 
-function multiply(x, y){
-return x + y; // 반환문
+function multiply(x, y){</br>
+return x + y; // 반환문</br>
 }
 
-// 함수 호출은 반환값으로 평가됨.
-var result = multiply(3, 5);
-console.log(result); // 8
+// 함수 호출은 반환값으로 평가됨.</br>
+var result = multiply(3, 5);</br>
+console.log(result); // 8</br>
 
 반환문은 함수 몸체 내부에서만 사용할 수 있음.
 (젼역에서 사용하면 문법 에러가 발생함.)
@@ -426,23 +426,23 @@ console.log(result); // 8
 
 // 매개변수 primitive는 원시 값을 전달받고, 매개변수 obj는 객체를 전달받는다.
 
-function changeVal(primitive, obj) {
-primitive += 100;
-obj.name = Kim;
-}
+function changeVal(primitive, obj) {</br>
+primitive += 100;</br>
+obj.name = Kim;</br>
+}</br>
 
-// 외부 상태
-var num = 100;
-var person = { name : 'Lee' };
+// 외부 상태</br>
+var num = 100;</br>
+var person = { name : 'Lee' };</br>
 
-// 원시값은 값 자체가 복사되어 전달되고 객체는 참조 값이 복사되어 전달됨.
-changeVal(num, person);
+// 원시값은 값 자체가 복사되어 전달되고 객체는 참조 값이 복사되어 전달됨. </br>
+changeVal(num, person);</br>
 
-// 원시 값은 원본이 훼손되지 않는다.
-console.log(num); // 100
+// 원시 값은 원본이 훼손되지 않는다.</br>
+console.log(num); // 100</br>
 
-//객체는 원본이 훼손됨.
-console.log(person); // {name: "Kim"}
+//객체는 원본이 훼손됨.</br>
+console.log(person); // {name: "Kim"}</br>
 
 원시 값은 재할당을 통해 새로운 원시 값으로 교체됐고, 객체는 재할당 없이 직접 할당된 객체를 변경했다.
 원시 값은 훼손되지 않는다. 객체 내부 값을 변경할 경우 원본 객체가 변경되는 부수 효과가 발생한다.
