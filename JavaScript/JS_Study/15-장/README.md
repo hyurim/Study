@@ -1,6 +1,7 @@
 좋은 코드는 가독성이 좋은 코드다.
 
 14. [let, const 키워드와 블록 레벨 스코프](#let-const-키워드와-블록-레벨-스코프)
+15. [프로퍼티 어트리뷰트](#프로퍼티-어트리뷰트)
 
 ## let, const 키워드와 블록 레벨 스코프
 
@@ -53,3 +54,182 @@ const 키워드는 상수를 선언하기 위해 사용.
 3. 재할당이 필요없는 상수와 객체에는 const 키워드를 사용한다.
 
 - 변수 선언할 때 const를 사용한 후 재할당이 필요하다면 그때 let으로 변경해도 늦지 않다.
+
+## 프로퍼티 어트리뷰트
+
+### 내부 슬롯과 내부 메서드
+
+자바스크립트 엔진의 구현 알고리즘을 설명하기 위해 ECMAScript 사양에서 사용하는 "의사 프로퍼티"와 "의사 메서드"이다.
+이중 대괄호로 감싼 이름들이 내부 슬롯과 내부 메서드이다.
+
+실제로 동작하지만 개발자가 직접 접근할 수 있도록 외부에 공개된 객체의 프로퍼티는 아님.
+(내부 슬롯과 내부 메서드에 직접적으로 접근하거나 호출할 수 있는 방법을 제공하지 않음.)
+
+### 프로퍼티 어트리뷰트와 프로퍼티 디스크립터 객체
+
+프로퍼티를 생성할 때 프로퍼티의 상태를 나타내는 프로퍼티 어트리뷰트를 기본값으로 자동 정의함.
+(프로퍼티 상태 : 프로퍼티의 값, 값의 갱신 가능 여부, 열거 가능 여부)
+
+프로퍼티 어트리뷰트 : 자바스크립트 엔진이 관리하는 내부 상태 값
+내부 슬롯
+
+Object.getOwnPropertyDescriptor 메서드를 사용하여 간접적으로 확인할 수는 있다.
+
+const person = { </br>
+name: 'Lim' </br>
+}; </br>
+</br>
+console.log(Object.getOwnPropertyDescriptor(person, 'name'));</br>
+
+첫 번째 매개변수로 객체의 참조를 전달하고, 두 번째 매개변수로 프로퍼티 키를 문자열로 전달함.
+
+Object.getOwnPropertyDescriptor 메서드는 프로퍼티 어트리뷰트 정보를 제공하는 "프로퍼티 디스크립터 객체"를 반환한다.
+(존재하지않거나 상속받은 것에 대해 요구할 경우 undefined가 반환됨.)
+하나의 프로퍼티에 대해 프로퍼티 디스크립터 객체를 반환함.
+
+ES8에서 도입된 Object.getOwnPropertyDescriptors 메서드는 모든 프로퍼티의 프로퍼티 어트리뷰트 정보를 제공하는 프로퍼티 디스크립터 객체들을 반환함.
+
+### 데이터 프로퍼티와 접근자 프로퍼티
+
+1. 데이터 프로퍼티
+
+- 키와 값으로 구성된 일반적인 프로퍼티. 지금까지 살펴본 모든 프로퍼티는 데이터 프로퍼티다.
+
+1-1. [[Value]]
+
+- 프로퍼티 키를 통해 프로퍼티 값에 접근하면 반환되는 값
+- 값을 변경하면 [[Value]]에 값을 재할당함. 없을 경우 동적 생성하고 생성된 [[Value]]에 값을 저장함.
+- 생략했을 때 기본값 undefined
+
+1-2. [[Writable]]
+
+- 프로퍼티 값의 변경 가능 여부를 나타내며 불리언 값을 갖음.
+- 해당 값이 false인 경우 해당 프로퍼티의 [[Value]]의 값을 변경할 수 없는 읽기 전용 프로퍼티가 됨.
+- 생략했을 때 기본값 false
+
+1-3. [[Enumerable]]
+
+- 프로퍼티의 열거 가능 여부를 나타내며 불리언 값을 갖음.
+- 해당 값이 false인 경우 해당 프로퍼티는 for... in문이나 Object.keys 메서드 등으로 열거할 수 없음.
+- 생략했을 때 기본값 false
+
+1-4. [[Configurable]]
+
+- 프로퍼티의 재정의 가능 여부를 나타내며 불리언 값을 가짐.
+- 해당 값이 false인 경우 프로퍼티 삭제, 어트리뷰트 값의 변경이 금지됨.
+  (단, [[Writable]]가 true인 경우 [[Value]]의 변경과 [[Writable]]을 false로 변경하는 것은 허용됨.)
+- 생략했을 때 기본값 false
+
+2. 접근자 프로퍼티
+   자체적으로 값을 갖지 않고 다른 데이터 프로퍼티의 값을 읽거나 저장할 때 호출되는 접근자 함수로 구성된 프로퍼티.
+
+2-1. [[Get]]
+
+- 접근자 프로퍼티를 통해 데이터 프로퍼티의 값을 읽을 때 호출되는 접근자 함수.
+  (접근자 프로퍼티 키로 프로퍼티 값에 접근하면 프로퍼티 어트리뷰트 [[Get]]의 값, 즉 getter 함수가 호출되고 그 결과가 프로퍼티 값으로 반환됨.)
+- 생략했을 때 기본값 undefined
+  2-2. [[Set]]
+
+- 접근자 프로퍼티를 통해 데이터 프로퍼티의 값을 저장할 때 호출되는 접근자 함수.
+  (접근자 프로퍼티 키로 프로퍼티 값을 저장하면 프로퍼티 어트리뷰트 [[Set]]의 값, 즉 setter 함수가 호출되고 그 결과가 프로퍼티 값으로 저장됨.)
+- 생략했을 때 기본값 undefined
+  2-3.[[Enumerable]]
+
+- 데이터 프로퍼티와 동일
+
+2-4. [[Configurable]]
+
+- 데이터 프로퍼티와 동일
+
+const person = { </br>
+// 데이터 프로퍼티 </br>
+firstName: 'Ungmo', </br>
+lastName: 'Lim', </br>
+</br>
+//fullName은 접근자 함수로 구성된 접근자 프로퍼티 </br>
+</br>
+//getter 함수 </br>
+get fullName() { </br>
+return `${this.firstName} ${this.lastName}`; </br>
+}, </br>
+//setter 함수 </br>
+set fullName(name) { </br>
+[this.firstName, this.lastName] = name.split(' '); </br>
+} </br>
+}; </br>
+</br>
+// 데이터 프로퍼티를 통한 프로퍼티 값의 참조 </br>
+console.log(person.firstName + ' ' + person.lastName); </br>
+</br>
+// 접근자 프로퍼티를 통한 프로퍼티 값의 저장 </br>
+// 접근자 프로퍼티 fullName에 값을 저장하면 setter 함수가 호출됨. </br>
+person.fullName = 'JongHyeon Lim'; </br>
+console.log(person); </br>
+</br>
+// 접근자 프로퍼티를 통한 프로퍼티 값의 참조 </br>
+// 접근자 프로퍼티 fullName에 접근하면 getter 함수가 호출됨. </br>
+console.log(person.fullName); </br>
+</br>
+// firstName은 데이터 프로퍼티 </br>
+// 데이터 프로퍼티는 [[Value]], [[Writable]], [[Enumerable]], [[Configurable]] </br>
+// 프로퍼티 어트리뷰트를 갖음. </br>
+</br>
+let descriptor = Object.getOwnPropertyDescriptor(person, 'firstName'); </br>
+console.log(descriptor); </br>
+</br>
+// fullName은 접근자 프로퍼티 </br>
+// 접근자 프로퍼티는 [[Get]], [[Set]], [[Enumerable]], [[Configurable]] </br>
+// 프로퍼티 어트리뷰트를 갖음. </br>
+</br>
+descriptor = Object.getOwnPropertyDescriptor(person, 'fullName'); </br>
+console.log(descriptor); </br>
+
+내부 슬롯/메서드 관점에서 설명하면
+
+1. 프로퍼티 키가 유효한지 확인함.
+
+- 프로퍼티 키는 문자열 또는 심벌이어야 함. 프로퍼티 키 "fullName"은 문자열이므로 유효한 프로퍼티 키다.
+
+2. 프로토타입 체인에서 프로퍼티를 검색함.
+
+- person 객체에 fullName 프로퍼티가 존재함.
+
+3. 검색된 fullName 프로퍼티가 데이터 데이터 프로퍼티인지 접근자 프로퍼티인지 확인함.
+
+- fullName 프로퍼티는 접근자 프로퍼티임.
+
+4. 접근자 프로퍼티 fullName의 프로퍼티 어트리뷰트 [[Get]]의 값, 즉 getter 함수를 호출하여 그 결과를 반환함.
+
+- 프로퍼티 fullName의 프로퍼티 어트리뷰트 [[Get]]의 값은 Object.getOwnPropertyDescriptor 메서드가 반환하는 프로퍼티 디스크립터 객체의 get 프로퍼티 값과 같음.
+
+### 프로퍼티 정의
+
+새로운 프로퍼티를 추가하면서 프로퍼티 어트리뷰트를 명시적으로 정의하거나, 기존 프로퍼티의 프로퍼티 어트리뷰트를 재정의 하는것.
+
+Object.defineProperty 메서드를 사용하면 프로퍼티의 어트리뷰트를 정의할 수 있음.
+
+- 디스크립터 객체의 프로퍼티를 누락시키면 undefined, false가 기본값.
+
+### 객체 변경 방지
+
+객체의 변경을 방지하는 다양한 메서드를 제공함.
+
+1. Object.preventExtensions 메서드
+
+- 객체의 확장을 금지함. (프로퍼티 추가가 금지됨.)
+- 가능 여부는 Object.isExtensible 메서드로 확인 가능
+
+2. Object.seal 메서드
+
+- 객체를 밀봉함. (읽기와 쓰기만 가능(프로퍼티 추가 및 삭제, 프로퍼티 어트리뷰트 재정의의 금지를 의미함.))
+- Object.isSealed 메서드로 확인 가능
+
+3. Object.freeze 메서드
+
+- 객체 동결 (읽기만 가능(프로퍼티 추가 및 삭제와 프로퍼티 어트리뷰트 재정의 금지, 프로퍼티 값 갱신 금지))
+- Object.isFrozen 메서드로 확인 가능
+
+#### 불변 객체
+
+- 변경 방지 메서드들은 얕은 변경 방지로 직속 프로퍼티 변경만 방지되고 중첩 객체까지는 영향을 주지 않음.
+- 중첩 객체까지 동결하려면 모든 프로퍼티에 대해 Object.freeze 메서드를 재귀적으로 호출해야 함.
