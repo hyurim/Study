@@ -9,7 +9,7 @@ person.age = 28;
 console.log(Object.getOwnPropertyDescriptors(person));
 
  */
-
+/*
 // 16.3
 
 const person = {
@@ -54,3 +54,36 @@ console.log(descriptor);
 
 descriptor = Object.getOwnPropertyDescriptor(person, 'fullName');
 console.log(descriptor);
+
+*/
+
+// 18.1
+
+const increase = function (num) {
+    return ++num;
+  }
+  
+  const decrease = function (num) {
+    return --num;
+  };
+  
+  // 객체에 저장 가능.
+  const auxs = { increase, decrease };
+  
+  // 함수의 매개변수에 전달 가능하며, 반환 값으로 사용할 수 있음.
+  function makeCounter(aux) {
+    let num = 0;
+  
+    return function () {
+      num = aux(num);
+      return num;
+    };
+  }
+  
+  const a = makeCounter(auxs.increase);
+  console.log(a()); // 1
+  console.log(a()); // 2
+  
+  const b = makeCounter(auxs.decrease);
+  console.log(b()); // -1
+  console.log(b()); // -2
