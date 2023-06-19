@@ -21,3 +21,9 @@ Boolean(''); => false : Boolean 생성자 함수를 new 연산자 없이 호출�
 
 !!'x'; => true
 !!''; => false : ! 부정 논리 연산자를 두 번 사용하는 방법
+
+Object.setPrototypeOf(a,b) // a 객체의 프로토타입을 b 객체로 교체
+
+객체 instanceof 생성자 함수 // 우변의 생성자 함수의 prototype에 바인딩된 객체가 좌변의 객체의 프로토타입 체인 상에 존재할 경우 true 아니면 false
+
+key in object // 객체 내에 특정 프로퍼티가 존재하는지 여부를 확인함.
