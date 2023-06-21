@@ -356,3 +356,113 @@ console.log(person.hasOwnProperty('name')); // true
 1. 표준 빌트인 객체
 2. 호스트 객체
 3. 사용자 정의 객체
+
+### 표준 빌트인 객체
+
+Math, Reflect, JSON을 제외하고, 나머지는 모두 인스턴스를 생성할 수 있는 생성자 함수 객체다.
+
+생성자 함수 객체 - 프로토타입, 정적 메서드 제공
+생성자 함수 X 객체 - 정적 메서드만 제공
+
+표준 빌트인 객체는 인스턴스 없이도 호출 가능한 빌트인 정적 메서드를 제공함.
+
+### 원시 값과 래퍼 객체
+
+래퍼 객체 : 문자열, 숫자, 불리언 값에 대해 객체처럼 접근하면 생성되는 임시 객체
+
+### 전역 객체
+
+코드가 실행되기 이전 단계에서 어떤 객체보다도 먼저 생성되는 특수한 객체
+
+계층적 구조상 어떤 객체에도 속하지 않은 모든 빌트인 객체의 최상위 객체다.
+어떤 객체의 프로퍼티도 아니며 객체의 계층적 구조상 표준 빌트인 객체와 호스트객체를 프로퍼티로 소유한다는 것을 말함.
+
+1. 개발자가 의도적으로 생성 불가능
+2. 프로퍼티를 참조할 때 window (또는 global) 생략 가능
+3. 모든 표준 빌트인 객체를 프로퍼티로 가지고 있음.
+4. 실행 환경에 따라 추가적으로 프로퍼티와 메서드를 갖음.
+5. var 키워드로 선언한 전역 변수와 선언하지 않은 변수에 값을 할당한 암묵적 전역. (전역 함수는 전역 객체의 프로퍼티가 됨.)
+6. let, const 키워드로 선언한 전역 변수는 전역 객체의 프로퍼티가 아님
+7. 브라우저 환경의 모든 코드는 하나의 전역 객체 window를 공유함.
+
+빌트인 전역 함수
+
+애플리케이션 전역에서 호출할 수 있는 빌트인 함수
+
+- isFinite : 유한수 일 경우 true 무한수 일 경우 false 반환 (숫자로 타입 변환 후 반환 NaN은 false)
+- isNaN : 전달받은 인수가 NaN 일 경우 true
+- parseFloat : 문자열 인수를 실수로 해석하여 반환
+
+1. 공백으로 구분된 문자열은 첫 번째 문자열만 반환
+2. 숫자로 변환할 수 없으면 NaN 반환
+3. 앞 뒤 공백은 무시됨.
+
+- parseInt : 정수로 해석하여 반환
+
+1. 두 번째 인수는 진법을 나타내는 기수 (반환 값은 언제나 10진수, 생략할 경우 10진수로 해석)
+2. 10진수 숫자를 해당 기수 문자열로 변환하여 반환하고 싶을 때는 Number.prototype.toString 메서드 사용
+3. 첫 번째 인수로 전달된 문자열이 '0x' 또는 '0X'로 시작하는 16진수 리터럴 일 경우 16진수로 해석하여 10진수로 반환
+4. 문자열의 첫 번째 인수가 해당 지수의 숫자로 변환될 수 없으면 NaN 반환
+5. 해당 진수를 나타내는 숫자가 아닌 문자와 마주치면 이 문자부터 계속되는 문자들은 전부 무시되고 해석된 정수값만 반환함.
+6. parseFloat와 세 가지 동일
+
+```
+isFinite(12); // true
+isFinite('abc'); // false
+
+isNaN(NaN); // true
+isNaN(1); // false
+
+parseFloat('96 11 06'); // 96
+parseFloat('I was 28'); // NaN
+parseFloat(' 28 '); // 28
+
+parseInt('28'); // 10 진수 반환
+parseInt('11100', 2); // 2진수 반환
+parseInt('34', 8); // 8진수 반환
+parseInt('1c', 16); // 16진수 반환
+
+const age = 28;
+let a, b, c;
+
+a = parseInt(age.toString(2), 2); // 28
+b = parseInt(age.toString(8), 8); // 28
+c = parseInt(age.toString(16), 16); // 28
+
+parseInt('1A0'); // 1
+parseInt('102', 2); // 2
+parseInt('58', 8); // 5
+parseInt('FG', 16); // 15
+
+```
+
+- encodeURI
+
+완전한 URI를 문자열로 전달받아 이스케이프 처리를 위해 인코딩
+
+(URI : 인터넷에 있는 자원을 나타내는 유일한 주소 (하위 개념으로는 URL, URN이 있음.))
+
+- decodeURI
+
+인코딩된 URI를 인수로 전달 받아 이스케이프 처리 이전으로 디코딩
+
+```
+const uri = 'http://example.com?name=임종현&job=programmer&teacher';
+
+const enc = encodeURI(uri);
+console.log(enc); // http://example.com?name=%EC%9E%84%EC%A2%85%ED%98%84&job=programmer&teacher
+
+const dec = decodeURI(enc);
+console.log(dec); // http://example.com?name=임종현&job=programmer&teacher
+
+```
+
+- encodeURIComponent / decodeURIComponent
+
+encodeURIComponent
+URI 구성 요소를 인수로 전달받아 인코딩함.
+
+인코딩 : URI의 문자들을 이스케이프 처리하는 것을 의미
+
+decodeURIComponent
+매개변수로 전달된 URI 구성 요소를 디코딩
