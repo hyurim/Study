@@ -25,12 +25,28 @@ class Queue {
 }
 
 const queue = new Queue();
-queue.enqueue(1);
-queue.enqueue(2);
-queue.enqueue(4);
-console.log(queue.dequeue()); // 1
-queue.enqueue(8);
-console.log(queue.size()); // 3
-console.log(queue.peek()); // 2
-console.log(queue.dequeue()); // 2
-console.log(queue.dequeue()); // 4
+let priorities1 = [2,1,3,2];
+let priorities2 = [1,1,9,1,1,1];
+let priorities1_Number = 2;
+let priorities2_Number = 0;
+
+
+let a = Math.max.apply(null, priorities2); // 우선순위 가장 높은 숫자 출력
+let b,c;
+
+for (let i=0; i < priorities2.length; i++) {
+    b = priorities2.indexOf(a, 0); // 우선순위 가장 높은 숫자의 인덱스 위치
+    c = queue.dequeue();
+}
+console.log(b);
+
+
+// queue.enqueue(1);
+// queue.enqueue(2);
+// queue.enqueue(4);
+// console.log(queue.dequeue()); // 1
+// queue.enqueue(8);
+// console.log(queue.size()); // 3
+// console.log(queue.peek()); // 2
+// console.log(queue.dequeue()); // 2
+// console.log(queue.dequeue()); // 4
