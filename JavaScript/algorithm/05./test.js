@@ -10,7 +10,6 @@ class HeapArray {
     constructor () {
         this.heap = [null]; // 관리할 배열
     }
-    
     push(value) {
         this.heap.push(value);
         let currentIndex = this.heap.length -1;
@@ -33,24 +32,31 @@ for(let i = 1; i <= works.length; i++){
 }
 
 const heap = new HeapArray();
-let arrayWork = [];
+let arrayWork = [works];
 let sum = 0;
-for(const j in works){
-    sum += Math.pow(works[j],2);
-    console.log(sum);
-}
 
-    for(let noI = 0; noI < no; noI++){
-        
-
+// 1을 n번 만큼 뺀 후 제곱하여 더한 값이 크면 반복
+function powSum(){
+    for(const j in works){
+        sum += Math.pow(works[j],2);
+        console.log(sum);
     }
+}
+let a1 = powSum();
+
+/*
+do { 
+    for(let noI = 0; noI < no; noI++){
+        if (h = 0)
+    }
+} while (true)
+
 
 while (arrayWork.length == (no * worksNo) + 1)
 {
     
 }
 
-/*
 heap.push(45);
 heap.push(32);
 heap.push(54);
